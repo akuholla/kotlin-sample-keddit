@@ -1,16 +1,21 @@
 package com.akshayholla.keddit.features.news
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.akshayholla.keddit.R
+import com.akshayholla.keddit.commons.RxBaseFragment
 import com.akshayholla.keddit.commons.extensions.inflate
 import kotlinx.android.synthetic.main.fragment_news.*
+import rx.schedulers.Schedulers
 
-class NewsFragment : Fragment() {
+class NewsFragment : RxBaseFragment() {
+
+    val newsManager: NewsManager by lazy { NewsManager() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -24,6 +29,25 @@ class NewsFragment : Fragment() {
         news_list.layoutManager = LinearLayoutManager(context)
 
         initAdapter()
+
+        if(savedInstanceState == null) {
+            requestNews()
+        }
+    }
+
+    fun requestNews() {
+        val subscription = newsManager.getNews()
+                .subscribeOn(Schedulers.io())
+                .subscribe (
+                        {
+                            retrivedNews ->
+                            (news_list.adapter as NewsAdapter).addNews(retrivedNews)
+                        },
+                        { e ->
+                            Snackbar.make(news_list, e.message ?: "", Snackbar.LENGTH_LONG).show()
+                        }
+                )
+        subscriptions.add(subscription)
     }
 
     private fun initAdapter() {
