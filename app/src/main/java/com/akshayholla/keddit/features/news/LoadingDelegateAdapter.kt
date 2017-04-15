@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.akshayholla.keddit.R
 import com.akshayholla.keddit.commons.adapter.ViewType
 import com.akshayholla.keddit.commons.adapter.ViewTypeDelegateAdapter
-import com.akshayholla.keddit.commons.inflate
+import com.akshayholla.keddit.commons.extensions.inflate
 
 class LoadingDelegateAdapter : ViewTypeDelegateAdapter {
 

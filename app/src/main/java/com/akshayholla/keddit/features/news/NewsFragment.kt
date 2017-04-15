@@ -1,17 +1,13 @@
 package com.akshayholla.keddit.features.news
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.akshayholla.keddit.R
-import com.akshayholla.keddit.commons.inflate
+import com.akshayholla.keddit.commons.extensions.inflate
 import kotlinx.android.synthetic.main.fragment_news.*
 
 class NewsFragment : Fragment() {

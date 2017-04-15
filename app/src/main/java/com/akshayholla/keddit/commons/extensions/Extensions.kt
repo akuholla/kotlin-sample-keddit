@@ -1,4 +1,6 @@
-package com.akshayholla.keddit.commons
+@file:JvmName("ExtensionsUtils")
+
+package com.akshayholla.keddit.commons.extensions
 
 import android.text.TextUtils
 import android.view.LayoutInflater
