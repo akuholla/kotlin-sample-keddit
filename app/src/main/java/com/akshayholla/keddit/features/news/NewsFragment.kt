@@ -12,18 +12,27 @@ import android.view.ViewGroup
 
 import com.akshayholla.keddit.R
 import com.akshayholla.keddit.commons.inflate
+import kotlinx.android.synthetic.main.fragment_news.*
 
 class NewsFragment : Fragment() {
 
-    private var newslist: RecyclerView? = null
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = container?.inflate(R.layout.fragment_news)
-        newslist = view?.findViewById(R.id.news_list) as RecyclerView?
-        newslist?.setHasFixedSize(true)
-        newslist?.layoutManager = LinearLayoutManager(context)
+        return container?.inflate(R.layout.fragment_news)
+    }
 
-        return view
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        news_list.setHasFixedSize(true)
+        news_list.layoutManager = LinearLayoutManager(context)
+
+        initAdapter()
+    }
+
+    private fun initAdapter() {
+        if (news_list.adapter == null) {
+            news_list.adapter = NewsAdapter()
+        }
     }
 }
