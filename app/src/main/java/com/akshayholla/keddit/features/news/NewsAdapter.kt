@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.akshayholla.keddit.commons.adapter.AdapterConstants
 import com.akshayholla.keddit.commons.adapter.ViewType
 import com.akshayholla.keddit.commons.adapter.ViewTypeDelegateAdapter
+import com.akshayholla.keddit.commons.models.RedditNewsItem
 
 class NewsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -20,6 +21,33 @@ class NewsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         delegateAdapters.put(AdapterConstants.NEWS, NewsDelegateAdapter())
         items = ArrayList()
         items.add(loadingItem)
+    }
+
+    fun addNews(news: List<RedditNewsItem>) {
+        val initPosition = items.size - 1
+        items.removeAt(initPosition)
+        notifyItemRemoved(initPosition)
+
+        items.addAll(news)
+        items.add(loadingItem)
+        notifyItemRangeChanged(initPosition, items.size)
+    }
+
+    fun getLastPostion() = if (items.lastIndex == -1) 0 else items.lastIndex
+
+    fun clearAndAddNews(news: List<RedditNewsItem>) {
+        items.clear()
+        notifyItemRangeChanged(0, getLastPostion())
+
+        items.addAll(news)
+        items.add(loadingItem)
+        notifyItemRangeInserted(0, items.size)
+    }
+
+    fun getNews(): List<RedditNewsItem> {
+        return items
+                .filter { it.getViewType() == AdapterConstants.NEWS }
+                .map { it as RedditNewsItem }
     }
 
     override fun getItemCount(): Int {
