@@ -8,14 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.akshayholla.keddit.R
+import com.akshayholla.keddit.commons.InfiniteScrollListener
 import com.akshayholla.keddit.commons.RxBaseFragment
 import com.akshayholla.keddit.commons.extensions.inflate
+import com.akshayholla.keddit.commons.models.RedditNews
 import kotlinx.android.synthetic.main.fragment_news.*
+import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class NewsFragment : RxBaseFragment() {
 
-    val newsManager: NewsManager by lazy { NewsManager() }
+    private var redditNews: RedditNews? = null
+    private val newsManager: NewsManager by lazy { NewsManager() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -26,7 +30,10 @@ class NewsFragment : RxBaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         news_list.setHasFixedSize(true)
-        news_list.layoutManager = LinearLayoutManager(context)
+        val linearLayout = LinearLayoutManager(context)
+        news_list.layoutManager = linearLayout
+        news_list.clearOnScrollListeners()
+        news_list.addOnScrollListener(InfiniteScrollListener( { requestNews() }, linearLayout))
 
         initAdapter()
 
@@ -36,12 +43,14 @@ class NewsFragment : RxBaseFragment() {
     }
 
     fun requestNews() {
-        val subscription = newsManager.getNews()
+        val subscription = newsManager.getNews(redditNews?.after ?: "")
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe (
                         {
                             retrivedNews ->
-                            (news_list.adapter as NewsAdapter).addNews(retrivedNews)
+                            redditNews = retrivedNews
+                            (news_list.adapter as NewsAdapter).addNews(retrivedNews.news)
                         },
                         { e ->
                             Snackbar.make(news_list, e.message ?: "", Snackbar.LENGTH_LONG).show()
