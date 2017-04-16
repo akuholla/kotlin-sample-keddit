@@ -5,8 +5,9 @@ import com.akshayholla.keddit.api.NewsRestAPI
 import com.akshayholla.keddit.commons.models.RedditNews
 import com.akshayholla.keddit.commons.models.RedditNewsItem
 import rx.Observable
+import javax.inject.Inject
 
-class NewsManager(private val api: NewsAPI = NewsRestAPI()) {
+class NewsManager @Inject constructor(private val api: NewsAPI) {
 
     fun getNews(after: String, limit: String = "10"): Observable<RedditNews> {
         return Observable.create {
