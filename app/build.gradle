@@ -39,6 +39,19 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.22'
+
+    testCompile('org.jetbrains.spek:spek-api:1.1.0')  {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testCompile('org.jetbrains.spek:spek-junit-platform-engine:1.1.0') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testCompile('org.jetbrains.kotlin:kotlin-reflect:1.1.0') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 }
 repositories {
     mavenCentral()
